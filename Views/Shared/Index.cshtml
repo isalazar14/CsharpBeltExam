@@ -1,0 +1,117 @@
+﻿@{
+  ViewData["Title"] = "Home Page";
+}
+@model LoginRegViewModel
+
+<div class="text-center" style="width: 40%; margin: auto;">
+  <ul class="nav nav-tabs justify-content-center" id="myTab" role="tablist">
+    <li class="nav-item">
+      <a class="nav-link active" id="login-tab" data-toggle="tab" href="#login" role="tab" aria-controls="login" aria-selected="true">Login</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="register-tab" data-toggle="tab" href="#register" role="tab" aria-controls="register" aria-selected="false">Register</a>
+    </li>
+  </ul>
+
+  <div class="tab-content">
+    <div class="tab-pane active" id="login" role="tabpanel" aria-labelledby="login-tab">
+      <h1>Log In</h1>
+      <form asp-action="Login" asp-controller="User" method="POST" class="inline-form">
+        <table class="table">
+          <tr>
+            <td class="text-right"><label asp-for="LoginUser.LoginEmail"></label></td>
+            <td>
+              <input asp-for="LoginUser.LoginEmail" class="form-control">
+              <small asp-validation-for="LoginUser.LoginEmail" class="text-danger"></small>
+              <small class="text-danger">@Html.ValidationMessage("Email")</small>
+            </td>
+          </tr>
+          <tr>
+            <td class="text-right"><label asp-for="LoginUser.LoginPassword"></label></td>
+            <td>
+              <input asp-for="LoginUser.LoginPassword" class="form-control">
+              <small asp-validation-for="LoginUser.LoginPassword" class="text-danger"></small>
+              <small class="text-danger">@Html.ValidationMessage("Password")</small>
+            </td>
+          </tr>
+        </table>
+        <button class="btn btn-primary" id="login-btn">Log In</button>
+      </form>
+      <br>
+      <a class="nav-link" id="register-link" data-toggle="tab" href="#register" aria-controls="register" aria-labelledby="register-tab">Need to Register?</a>
+    </div>
+
+    <div class="tab-pane" id="register" role="tabpanel" aria-labelledby="register-tab">
+      <h1>Register</h1>
+      <form asp-action="Register" asp-controller="User" method="POST">
+        <table class="table">
+          <tr>
+            <td class="text-right"><label asp-for="User.Fname"></label></td>
+            <td>
+              <span asp-validation-for="User.Fname"></span>
+              <input asp-for="User.Fname" class="form-control">
+            </td>
+          </tr>
+         <tr>
+            <td class="text-right"><label asp-for="User.Lname"></label></td>
+            <td>
+              <span asp-validation-for="User.Lname"></span>
+              <input asp-for="User.Lname" class="form-control">
+            </td>
+         </tr>
+          <tr>
+            <td class="text-right"><label asp-for="User.Dob"></label></td>
+            <td>
+              <span asp-validation-for="User.Dob"></span>
+              <input asp-for="User.Dob" class="form-control">
+            </td>
+          </tr>
+          <tr>
+            <td class="text-right"><label asp-for="User.Email"></label></td>
+            <td>
+              <span asp-validation-for="User.Email"></span>
+              <input asp-for="User.Email" class="form-control">
+            </td>
+          </tr>
+          <tr>
+            <td class="text-right"><label asp-for="User.EmailConfirm"></label></td>
+            <td>
+              <span asp-validation-for="User.EmailConfirm"></span>
+              <input asp-for="User.EmailConfirm" class="form-control">
+            </td>
+          </tr>
+          <tr>
+            <td class="text-right"><label asp-for="User.Password"></label></td>
+            <td>
+              <span asp-validation-for="User.Password"></span>
+              <input asp-for="User.Password" class="form-control">
+            </td>
+          </tr>
+          <tr>
+            <td class="text-right"><label asp-for="User.PwConfirm"></label></td>
+            <td>
+              <span asp-validation-for="User.PwConfirm"></span>
+              <input asp-for="User.PwConfirm" class="form-control" onleave="check_pw_match()" required>
+            </td>
+          </tr>
+        </table>
+        <button class="btn btn-primary" id="register-btn">Register</button>
+      </form>
+      <a class="nav-link" id="login-link" data-toggle="tab" href="#login" aria-controls="login">Log in</a>
+    </div>
+  </div>
+</div>
+
+<script>
+  function check_pw_match() {
+    var pw = document.getElementById("pw").value;
+    var pw_conf = document.getElementById("pw_conf").value
+    if (pw != pw_conf) {
+      document.getElementById("register-btn").disabled = true
+    }
+    else {
+      document.getElementById("register-btn").disabled = false
+    }
+
+  }
+</script>

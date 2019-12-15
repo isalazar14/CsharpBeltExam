@@ -1,0 +1,16 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-right">
+  <a href="/dashboard" class="btn btn-primary text-light">Dashboard</a>
+  <a href="/logout" class="btn btn-danger text-light">Logout</a>
+</div>
+<div class="text-center">
+  <h1 style="display: inline-block;">Welcome, @ViewBag.Fname</h1>
+  <a class="btn btn-danger" style="float: right;" href="/logout">Log Out</a>
+  <h3>You have successfully registered/logged in.</h3>
+  <div class="bottom" style="margin: 0px auto;">
+    <a class="btn btn-primary " href="#">button</a>
+  </div>
+</div>

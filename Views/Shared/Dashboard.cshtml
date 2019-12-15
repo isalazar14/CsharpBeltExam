@@ -1,0 +1,69 @@
+@{
+  ViewData["Title"] = "Home Page";
+}
+@using System.Linq
+@model DashboardView
+
+<div class="text-right">
+  <a href="/dashboard" class="btn btn-secondary text-light">Dashboard</a>
+  <a href="/logout" class="btn btn-danger text-light">Logout</a>
+</div>
+<div class="text-center" style="width: 75%; margin: auto;">
+  <h1 class="display-4">All Things</h1>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <td>Thing</td>
+        <td>Date and Time</td>
+        <td>Duration</td>
+        <td>Coordinator</td>
+        <td>Guests</td>
+        <td>Actions</td>
+      </tr>
+    </thead>
+    <tbody>
+    @if (Model.Things != null)
+    {
+      @foreach (Thing t in Model.Things)
+      {
+        <tr>
+          <td><a href="thing/@t.Tid">@t.Name</a></td>
+          <td>@t.Date.ToString("M/dd") @@ @t.Time.ToString("h:mmtt")</td>
+          <td>@t.Duration @t.DurationUnits</td>
+          <td>@t.Creator.Fname</td>
+          <td>@t.ThingGuests.Count()</td>
+          <td>
+            @{
+                string BtnColor;
+                string Verb;
+
+                @if (t.CreatorId == Model.CurrentUid)
+                {
+                  Verb = "Delete";
+                  BtnColor = "danger";
+                }
+                else if (! t.ThingGuests.Any(tg => tg.GuestId == Model.CurrentUid))
+                {
+                  Verb = "Join";
+                  BtnColor = "primary";
+                }
+                else
+                {
+                  Verb = "Leave";
+                  BtnColor = "warning";
+                }
+                <!-- <form asp-action="ThingAction" controller="Home" method="post">
+                  <input type="hidden" asp-for="TG.ThingId" value="@t.Tid">
+                  <button class="btn btn-@BtnColor text-light">@Verb</button>
+                </form> -->
+                <a href="/action/@t.Tid" class="btn btn-@BtnColor text-light">@Verb</a>
+                <small class="text-danger">@Html.ValidationMessage("Busy")</small>
+              }
+          </td>
+        </tr>
+      };
+    }
+    </tbody>
+  </table>
+  <a href="new" class="btn btn-success" style="position: fixed; right: 100px; bottom: 100px">New Thing</a>
+</div>

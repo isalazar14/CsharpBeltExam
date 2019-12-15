@@ -1,0 +1,62 @@
+@{
+    ViewData["Title"] = "Home Page";
+}
+@model Thing
+
+<div class="text-right">
+  <a href="/dashboard" class="btn btn-secondary text-light">Dashboard</a>
+  <a href="/logout" class="btn btn-danger text-light">Logout</a>
+</div>
+<div class="text-center" style="width: 40%; margin: auto;">
+  <h1 class="">Plan Your Thing</h1>
+  <form asp-action="NewThing" asp-controller="Home" method="post">
+    <table class="table">
+      <tr>
+        <td class="text-right"><label asp-for="Name"></label></td>
+        <td>
+          <input asp-for="Name" class="form-control" focused>
+          <small asp-validation-for="Name" class="text-danger"></small>
+          <!-- <small class="text-danger">Html.ValidationMessage("Email")</small> -->
+        </td>
+      </tr>
+      <tr>
+        <td class="text-right"><label asp-for="Date"></label></td>
+        <td>
+          <input asp-for="Date" class="form-control" value='@DateTime.Today.ToString("yyyy-mm-dd")'>
+          <small asp-validation-for="Date" class="text-danger"></small>
+        </td>
+      </tr>
+      <tr>
+        <td class="text-right"><label asp-for="Time"></label></td>
+        <td>
+          <input asp-for="Time" class="form-control">
+          <small asp-validation-for="Time" class="text-danger"></small>
+        </td>
+      </tr>
+      <tr>
+        <td class="text-right"><label asp-for="Duration"></label></td>
+        <td>
+          <input asp-for="Duration" class="form-control">
+          <small asp-validation-for="Duration" class="text-danger"></small>
+          <select asp-for="DurationUnits" class="form-control">
+            <option selected disabled>Select Units</option>
+            <option asp-for="DurationUnits" value="Minutes">Minutes</option>
+            <option asp-for="DurationUnits" value="Hours">Hours</option>
+            <option asp-for="DurationUnits" value="Days">Days</option>
+          </select>
+          <!-- <small class="text-danger">Html.ValidationMessage("Email")</small> -->
+        </td>
+      </tr>
+      <tr>
+        <td class="text-right"><label asp-for="Description"></label></td>
+        <td>
+          <textarea asp-for="Description" class="form-control"></textarea>
+          <small asp-validation-for="Description" class="text-danger"></small>
+          <!-- <small class="text-danger">Html.ValidationMessage("Email")</small> -->
+        </td>
+      </tr>
+      <tr>
+    </table>
+    <button class="btn btn-primary" id="login-btn">Create</button>
+  </form>
+</div>

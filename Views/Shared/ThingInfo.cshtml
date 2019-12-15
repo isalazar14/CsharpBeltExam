@@ -1,0 +1,51 @@
+@{
+  ViewData["Title"] = "Home Page";
+}
+@model Thing
+
+<div class="text-right">
+  <a href="/dashboard" class="btn btn-secondary text-light">Dashboard</a>
+  <a href="/logout" class="btn btn-danger text-light">Logout</a>
+</div>
+<div class="text-center" style="width: 40%; margin: auto;">
+  <h1 class="display-4">@Model.Name
+  @{
+    string BtnColor;
+    string Verb;
+    if (Model.CreatorId == ViewBag.Uid)
+    {
+      Verb = "Delete";
+      BtnColor = "danger";
+    }
+    else if (! Model.ThingGuests.Any(tg => tg.GuestId == ViewBag.Uid))
+    {
+      Verb = "Join";
+      BtnColor = "primary";
+    }
+    else
+    {
+      Verb = "Leave";
+      BtnColor = "warning";
+    }
+  <a href="/action/@Model.Tid" class="btn btn-@BtnColor text-light">@Verb</a>
+  }
+
+  <a href="/action/@Model.Tid"></a>
+  </h1>
+  <dl class="text-left">
+  <dt>Coordinator: @Model.Creator.Fname</dt>
+  <dt>Description</dt>
+    <dd>@Model.Description</dd>
+  <dt>Date and time</dt>
+    <dd>@Model.Date.ToString("MMM dd, yyyy"), at @Model.Time.ToString("h:mm tt")</dd>
+  <dt>Duration</dt>
+    <dd>@Model.Duration @Model.DurationUnits</dd>
+  <dt>Participants</dt>
+  <dt>
+    @foreach (ThingGuest tg in Model.ThingGuests)
+    {
+      <dd>@tg.Guest.Fname</dd>
+    }
+  </dt>
+  </dl>
+</div>
