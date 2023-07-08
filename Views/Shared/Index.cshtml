@@ -30,7 +30,7 @@
             <td class="text-right"><label asp-for="LoginUser.LoginPassword"></label></td>
             <td>
               <input asp-for="LoginUser.LoginPassword" class="form-control">
-              <small asp-validation-for="LoginUser.LoginPassword" class="text-danger"></small>
+              <small asp-validation-for="LoginUser.Password" class="text-danger"></small>
               <small class="text-danger">@Html.ValidationMessage("Password")</small>
             </td>
           </tr>

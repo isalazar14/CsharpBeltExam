@@ -33,7 +33,7 @@ namespace BeltExam.Models
     [Required]
     [NotMapped]
     [MinLength(8)]
-    [RegularExpression(@"^(?=.{8})(?=.*[a-zA-Z0-9_])(?=.*[^a-zA-Z0-9_]).*$")]
+    // [RegularExpression(@"^(?=.{8})(?=.*[a-zA-Z0-9_])(?=.*[^a-zA-Z0-9_]).*$")]
     [DataType(DataType.Password)]
     public string Password {get; set;}
 

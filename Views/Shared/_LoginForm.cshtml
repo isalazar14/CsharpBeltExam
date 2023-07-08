@@ -1,0 +1,30 @@
+@model LoginUser
+<form asp-action="Login" asp-controller="User" method="POST" class="inline-form">
+  <table class="table">
+    <tr>
+      <td class="text-right"><label asp-for="LoginEmail"></label></td>
+      <td>
+        <input asp-for="LoginEmail" class="form-control" />
+        <small
+          asp-validation-for="LoginEmail"
+          class="text-danger"
+        ></small>
+        <small class="text-danger">@Html.ValidationMessage("Email")</small>
+      </td>
+    </tr>
+    <tr>
+      <td class="text-right">
+        <label asp-for="LoginPassword"></label>
+      </td>
+      <td>
+        <input asp-for="LoginPassword" class="form-control" />
+        <small
+          asp-validation-for="Password"
+          class="text-danger"
+        ></small>
+        <small class="text-danger">@Html.ValidationMessage("Password")</small>
+      </td>
+    </tr>
+  </table>
+  <button class="btn btn-primary" id="login-btn">Log In</button>
+</form>

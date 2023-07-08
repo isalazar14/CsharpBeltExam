@@ -1,0 +1,43 @@
+﻿@{
+  ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center" style="width: 40%; margin: auto;">
+  <ul class="nav nav-tabs justify-content-center" id="myTab" role="tablist">
+    <li class="nav-item">
+      <a class="nav-link active" id="login-tab" data-toggle="tab" href="#login" role="tab" aria-controls="login" aria-selected="true">Login</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="register-tab" data-toggle="tab" href="#register" role="tab" aria-controls="register" aria-selected="false">Register</a>
+    </li>
+  </ul>
+
+  <div class="tab-content">
+    <div class="tab-pane active" id="login" role="tabpanel" aria-labelledby="login-tab">
+      <h1>Log In</h1>
+      <partial name="_LoginForm" />
+      <br>
+      <a class="nav-link" id="register-link" data-toggle="tab" href="#register" aria-controls="register" aria-labelledby="register-tab">Need to Register?</a>
+    </div>
+
+    <div class="tab-pane" id="register" role="tabpanel" aria-labelledby="register-tab">
+      <h1>Register</h1>
+      <partial name="_RegisterForm" />
+      <a class="nav-link" id="login-link" data-toggle="tab" href="#login" aria-controls="login">Log in</a>
+    </div>
+  </div>
+</div>
+
+<script>
+  function check_pw_match() {
+    var pw = document.getElementById("pw").value;
+    var pw_conf = document.getElementById("pw_conf").value
+    if (pw != pw_conf) {
+      document.getElementById("register-btn").disabled = true
+    }
+    else {
+      document.getElementById("register-btn").disabled = false
+    }
+
+  }
+</script>

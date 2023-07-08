@@ -263,7 +263,8 @@ FakesAssemblies/
 # Visual Studio 6 workspace options file
 *.opt
 
-appsettings.json
+appsettings*.json
+# appsettings.development.json
 
 *.swp
 *.*~
@@ -297,3 +298,6 @@ msbuild.wrn
 
 # Visual Studio 2015
 .vs/
+
+
+*.sln
