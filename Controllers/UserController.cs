@@ -20,17 +20,7 @@ namespace BeltExam.Controllers
       db = context;
     }
 
-    public bool inSession()
-    {
-      int? Uid = HttpContext.Session.GetInt32("Uid");
-      if (Uid == null)
-      {
-        return false;
-      }
-      return true;
-    }
-
-    public bool UserLoggedIn()
+    public bool IsUserInSession()
     {
       int? Uid = HttpContext.Session.GetInt32("Uid");
       if (Uid == null)
@@ -45,8 +35,7 @@ namespace BeltExam.Controllers
     {
       // LoginRegViewModel viewModel = new LoginRegViewModel();
       // return View(viewModel);
-      int? Uid = HttpContext.Session.GetInt32("Uid");
-      if (Uid == null)
+      if (IsUserInSession() == false)
       {
         return View();
       }
@@ -84,7 +73,7 @@ namespace BeltExam.Controllers
       db.Add(NewUser.User);
       db.SaveChanges();
 
-      User dbUser = db.Users.FirstOrDefault(user => user.Email == NewUser.User.Email);
+      // User dbUser = db.Users.FirstOrDefault(user => user.Email == NewUser.User.Email);
       ViewBag.Fname = NewUser.User.Fname;
       HttpContext.Session.SetInt32("Uid", NewUser.User.Uid);
 
@@ -94,8 +83,7 @@ namespace BeltExam.Controllers
     [HttpGet("login")]
     public IActionResult Login()
     {
-      int? Uid = HttpContext.Session.GetInt32("Uid");
-      if (Uid == null)
+      if (IsUserInSession() == false)
       {
         return RedirectToAction("Index");
       }
@@ -105,12 +93,13 @@ namespace BeltExam.Controllers
     [HttpPost("login")]
     public IActionResult Login(LoginRegViewModel LoginInfo)
     {
+      System.Console.WriteLine("****REACHED LOGIN POST ROUTE****");
       if (!ModelState.IsValid)
       {
         return View("Index", LoginInfo);
       }
 
-      User dbUser = db.Users.FirstOrDefault(user => user.Email == LoginInfo.LoginUser.LoginEmail);
+      User? dbUser = db.Users.FirstOrDefault(user => user.Email == LoginInfo.LoginUser.LoginEmail);
 
       if (dbUser == null)
       {
@@ -140,34 +129,34 @@ namespace BeltExam.Controllers
 
     [HttpGet("dashboard")]
     public IActionResult Dashboard()
-    {
-      if (UserLoggedIn())
-      {
-        DashboardView viewModel = new DashboardView
-        {
-          CurrentUid = (int)HttpContext.Session.GetInt32("Uid"),
-          // Things = db.Things.Include(t => t.Creator).Include(t => t.ThingGuests).Where(t => t.Date >= DateTime.Today && t.Time >= DateTime.Now).ToList()
-          Things = db.Things.Include(t => t.Creator).Include(t => t.ThingGuests).Where(t => t.StartDateTime >= DateTime.Now).ToList()
-        };
-        return View(viewModel);
-      }
-      // // DEBUG START
-      // HttpContext.Session.SetInt32("Uid", 1);
-      // DashboardView viewModel = new DashboardView{
-      //   Things = db.Things.Include(t => t.ThingGuests).ToList(),
-      // };
+		{
+			if (!IsUserInSession())
+			{
+				// // DEBUG START
+				// HttpContext.Session.SetInt32("Uid", 1);
+				// DashboardView viewModel = new DashboardView{
+				//   Things = db.Things.Include(t => t.ThingGuests).ToList(),
+				// };
 
-      // viewModel.CurrentUid = 1;
-      // return View(viewModel);
-      // // DEBUG END
+				// viewModel.CurrentUid = 1;
+				// return View(viewModel);
+				// // DEBUG END
 
-      return RedirectToAction("Index");
-    }
+				return RedirectToAction("Index");
+			}
+			DashboardView viewModel = new DashboardView
+			{
+				CurrentUid = (int)HttpContext.Session.GetInt32("Uid"),
+				// Things = db.Things.Include(t => t.Creator).Include(t => t.ThingGuests).Where(t => t.Date >= DateTime.Today && t.Time >= DateTime.Now).ToList()
+				Things = db.Things.Include(t => t.Creator).Include(t => t.ThingGuests).Where(t => t.StartDateTime >= DateTime.Now).ToList()
+			};
+			return View(viewModel);
+		}
 
-    [HttpGet("new")]
+		[HttpGet("new")]
     public IActionResult NewThing()
     {
-      if (UserLoggedIn())
+      if (IsUserInSession())
       {
         return View();
       }
@@ -177,7 +166,7 @@ namespace BeltExam.Controllers
     [HttpPost("new")]
     public IActionResult NewThing(Thing NewThing)
     {
-      if (UserLoggedIn())
+      if (IsUserInSession())
       {
         if (!ModelState.IsValid)
         {
@@ -204,10 +193,10 @@ namespace BeltExam.Controllers
     [HttpGet("thing/{tid}")]
     public IActionResult ThingInfo(int tid)
     {
-      if (UserLoggedIn())
+      if (IsUserInSession())
       {
         int? currentTid = HttpContext.Session.GetInt32("Tid");
-        Thing viewModel = db.Things.Include(t => t.Creator).Include(t => t.ThingGuests).ThenInclude(g => g.Guest).FirstOrDefault(t => t.Tid == (int)tid);
+        Thing? viewModel = db.Things.Include(t => t.Creator).Include(t => t.ThingGuests).ThenInclude(g => g.Guest).FirstOrDefault(t => t.Tid == (int)tid);
         if (viewModel == null)
         {
           return RedirectToAction("Dashboard");
@@ -229,7 +218,7 @@ namespace BeltExam.Controllers
       //   return RedirectToAction("Dashboard");
       // }
       // TGform.TG.GuestId = (int)Uid;
-      Thing CurrentThing = db.Things.Include(t => t.ThingGuests).FirstOrDefault(t => t.Tid == tid);
+      Thing? CurrentThing = db.Things.Include(t => t.ThingGuests).FirstOrDefault(t => t.Tid == tid);
       if (CurrentThing == null)
       {
         return RedirectToAction("Dashboard");
@@ -245,7 +234,7 @@ namespace BeltExam.Controllers
       if (isGuest)
       {
         // un-RSVP if already a guest
-        ThingGuest currentGuest = db.ThingGuests.Where(tg => tg.ThingId == CurrentThing.Tid).FirstOrDefault(tg => tg.GuestId == (int)Uid);
+        ThingGuest? currentGuest = db.ThingGuests.Where(tg => tg.ThingId == CurrentThing.Tid).FirstOrDefault(tg => tg.GuestId == (int)Uid);
         db.ThingGuests.Remove(currentGuest);
       }
       else
